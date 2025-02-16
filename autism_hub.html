@@ -165,6 +165,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-width: 200px;
         }
 
         .submit-button:hover {
@@ -178,9 +180,9 @@
         }
 
         .submit-button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            transform: none;
+            background-color: #34617a;
+            opacity: 0.8;
+            cursor: wait;
         }
 
         .nav-buttons {
@@ -209,6 +211,26 @@
         .btn-specialist {
             background-color: #2c5364;
             color: white;
+        }
+
+        .btn-lang {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+        }
+
+        .lang-option {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .lang-option:hover {
+            opacity: 0.7;
+        }
+
+        .lang-option.active {
+            font-weight: 600;
         }
 
         /* Responsive styles */
@@ -310,6 +332,11 @@
             <div class="nav-buttons">
                 <a href="index.html" class="btn">Back to Home</a>
                 <a href="autism_specialists_map.html" class="btn btn-specialist">Find Specialist</a>
+                <button class="btn btn-lang">
+                    <span class="lang-option active" onclick="setLanguage('en')">EN</span>
+                    <span>/</span>
+                    <span class="lang-option" onclick="setLanguage('fr')">FR</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -362,6 +389,123 @@
     </main>
 
     <script>
+        // Define translations globally
+        const translations = {
+            en: {
+                title: "Autism Hub",
+                description: "Welcome to our Autism Hub. Select your role and what you're looking for to find personalized resources and support.",
+                roleLabel: "I am a...",
+                resourceLabel: "Looking for...",
+                selectRole: "Select your role",
+                selectResources: "Select resources",
+                findResources: "Find Resources",
+                backHome: "Back to Home",
+                findSpecialist: "Find Specialist",
+                roles: {
+                    "A person with autism": "A person with autism",
+                    "A parent or caregiver of someone with autism": "A parent or caregiver of someone with autism",
+                    "A healthcare professional": "A healthcare professional",
+                    "An educator or school staff": "An educator or school staff",
+                    "An autism specialist": "An autism specialist",
+                    "A person wanting to learn more about autism": "A person wanting to learn more about autism",
+                    "An employer supporting autistic employees": "An employer supporting autistic employees"
+                },
+                resources: {
+                    "Diagnosis and assessment resources": "Diagnosis and assessment resources",
+                    "Therapy and counseling support": "Therapy and counseling support",
+                    "Social skills programs": "Social skills programs",
+                    "Educational tools and resources": "Educational tools and resources",
+                    "Sensory-friendly products and environments": "Sensory-friendly products and environments",
+                    "Employment support and workplace accommodations": "Employment support and workplace accommodations",
+                    "Legal and financial assistance for autism-related needs": "Legal and financial assistance for autism-related needs",
+                    "Community support groups and peer connections": "Community support groups and peer connections",
+                    "Research and training materials for professionals": "Research and training materials for professionals"
+                }
+            },
+            fr: {
+                title: "Centre de l'Autisme",
+                description: "Bienvenue dans notre Centre de l'Autisme. Sélectionnez votre rôle et ce que vous recherchez pour trouver des ressources et un soutien personnalisés.",
+                roleLabel: "Je suis...",
+                resourceLabel: "Je cherche...",
+                selectRole: "Sélectionnez votre rôle",
+                selectResources: "Sélectionnez les ressources",
+                findResources: "Trouver des Ressources",
+                backHome: "Retour à l'Accueil",
+                findSpecialist: "Trouver un Spécialiste",
+                roles: {
+                    "A person with autism": "Une personne autiste",
+                    "A parent or caregiver of someone with autism": "Un parent ou un soignant d'une personne autiste",
+                    "A healthcare professional": "Un professionnel de la santé",
+                    "An educator or school staff": "Un éducateur ou membre du personnel scolaire",
+                    "An autism specialist": "Un spécialiste de l'autisme",
+                    "A person wanting to learn more about autism": "Une personne souhaitant en savoir plus sur l'autisme",
+                    "An employer supporting autistic employees": "Un employeur soutenant des employés autistes"
+                },
+                resources: {
+                    "Diagnosis and assessment resources": "Ressources de diagnostic et d'évaluation",
+                    "Therapy and counseling support": "Soutien thérapeutique et conseil",
+                    "Social skills programs": "Programmes de compétences sociales",
+                    "Educational tools and resources": "Outils et ressources pédagogiques",
+                    "Sensory-friendly products and environments": "Produits et environnements adaptés aux besoins sensoriels",
+                    "Employment support and workplace accommodations": "Soutien à l'emploi et aménagements du lieu de travail",
+                    "Legal and financial assistance for autism-related needs": "Assistance juridique et financière pour les besoins liés à l'autisme",
+                    "Community support groups and peer connections": "Groupes de soutien communautaire et connexions entre pairs",
+                    "Research and training materials for professionals": "Matériel de recherche et de formation pour les professionnels"
+                }
+            }
+        };
+
+        // Define setLanguage function globally
+        function setLanguage(lang) {
+            // Update active state of language buttons
+            document.querySelectorAll('.lang-option').forEach(el => {
+                el.classList.remove('active');
+                if (el.textContent.toLowerCase() === lang.toLowerCase()) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Update text content
+            document.querySelector('.title').textContent = translations[lang].title;
+            document.querySelector('.description').textContent = translations[lang].description;
+            document.querySelector('.dropdown-label:first-of-type').textContent = translations[lang].roleLabel;
+            document.querySelector('.dropdown-label:last-of-type').textContent = translations[lang].resourceLabel;
+            
+            // Update dropdown options
+            const roleOptions = document.querySelectorAll('#role-options .option');
+            const resourceOptions = document.querySelectorAll('#resource-options .option');
+
+            roleOptions.forEach(option => {
+                const englishText = option.getAttribute('data-en') || option.textContent;
+                option.setAttribute('data-en', englishText);
+                option.textContent = translations[lang].roles[englishText];
+            });
+
+            resourceOptions.forEach(option => {
+                const englishText = option.getAttribute('data-en') || option.textContent;
+                option.setAttribute('data-en', englishText);
+                option.textContent = translations[lang].resources[englishText];
+            });
+
+            // Update buttons
+            document.querySelector('.submit-button').textContent = translations[lang].findResources;
+            document.querySelector('a.btn:not(.btn-specialist)').textContent = translations[lang].backHome;
+            document.querySelector('.btn-specialist').textContent = translations[lang].findSpecialist;
+
+            // Update select buttons if they're in default state
+            const roleButton = document.querySelector('#role-options').previousElementSibling;
+            const resourceButton = document.querySelector('#resource-options').previousElementSibling;
+
+            if (roleButton.textContent === translations['en'].selectRole || 
+                roleButton.textContent === translations['fr'].selectRole) {
+                roleButton.textContent = translations[lang].selectRole;
+            }
+            if (resourceButton.textContent === translations['en'].selectResources || 
+                resourceButton.textContent === translations['fr'].selectResources) {
+                resourceButton.textContent = translations[lang].selectResources;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             function toggleDropdown(id) {
                 const dropdowns = document.getElementsByClassName('select-options');
@@ -409,7 +553,66 @@
                     return;
                 }
 
-                alert(`Thank you for your submission!\n\nRole: ${role}\nLooking for: ${resource}\n\nWe'll direct you to relevant resources.`);
+                // Create a results object to store matching resources
+                const resourceMatches = {
+                    'A person with autism': {
+                        'Diagnosis and assessment resources': 'resources/autism-assessment.html',
+                        'Therapy and counseling support': 'resources/therapy-support.html',
+                        'Social skills programs': 'resources/social-skills.html',
+                        'Sensory-friendly products and environments': 'resources/sensory-support.html'
+                    },
+                    'A parent or caregiver of someone with autism': {
+                        'Educational tools and resources': 'resources/educational-tools.html',
+                        'Therapy and counseling support': 'resources/parent-support.html',
+                        'Community support groups and peer connections': 'resources/community-support.html'
+                    },
+                    'A healthcare professional': {
+                        'Research and training materials for professionals': 'resources/professional-training.html',
+                        'Diagnosis and assessment resources': 'resources/clinical-resources.html'
+                    },
+                    'An educator or school staff': {
+                        'Educational tools and resources': 'resources/classroom-resources.html',
+                        'Social skills programs': 'resources/school-programs.html'
+                    },
+                    'An autism specialist': {
+                        'Research and training materials for professionals': 'resources/specialist-resources.html',
+                        'Therapy and counseling support': 'resources/specialist-tools.html'
+                    },
+                    'A person wanting to learn more about autism': {
+                        'Educational tools and resources': 'resources/autism-education.html',
+                        'Community support groups and peer connections': 'resources/learning-resources.html'
+                    },
+                    'An employer supporting autistic employees': {
+                        'Employment support and workplace accommodations': 'resources/workplace-support.html',
+                        'Sensory-friendly products and environments': 'resources/workplace-accommodation.html'
+                    }
+                };
+
+                // Check if we have matching resources
+                if (resourceMatches[role] && resourceMatches[role][resource]) {
+                    const resourceUrl = resourceMatches[role][resource];
+                    
+                    // Show loading state
+                    const submitButton = document.querySelector('.submit-button');
+                    submitButton.textContent = 'Loading...';
+                    submitButton.disabled = true;
+
+                    // Simulate loading time (remove this in production)
+                    setTimeout(() => {
+                        // For now, show an alert since resource pages aren't created yet
+                        alert(`We'll be directing you to specific resources for:\n\nRole: ${role}\nResource: ${resource}\n\nThis feature will be available soon!`);
+                        
+                        // Reset button
+                        submitButton.textContent = translations[document.querySelector('.lang-option.active').textContent.toLowerCase()].findResources;
+                        submitButton.disabled = false;
+
+                        // In production, uncomment this to redirect to the resource page:
+                        // window.location.href = resourceUrl;
+                    }, 1500);
+                } else {
+                    // Generic resources if no specific match is found
+                    alert('We\'ll connect you with our general resources that might help. This feature will be available soon!');
+                }
             }
 
             function updateSubmitButton() {

@@ -39,11 +39,11 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1rem;  /* Reduced from 2rem */
         }
 
         .logo-image {
-            width: clamp(50px, 8vw, 80px);  /* Responsive logo size */
+            width: clamp(60px, 8vw, 100px);  /* Adjusted size range */
             height: auto;
         }
 
@@ -55,22 +55,18 @@
 
         .logo-text {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.5rem;  /* Reduced from 0.8rem */
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(1.2rem, 3vw, 1.8rem);  /* Responsive text size */
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);  /* Adjusted font size */
             font-weight: 600;
-            color: #1a2a3a;  /* Dark blue-gray text */
+            color: #1a2a3a;
             letter-spacing: 0.5px;
-        }
-
-        .logo-text span {
-            position: relative;
         }
 
         .logo-text span:first-child {
             font-weight: 400;
-            font-size: 1.4rem;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: clamp(1rem, 2vw, 1.4rem);  /* Adjusted proportion */
+            color: #1a2a3a;
         }
 
         .nav-buttons {
@@ -817,6 +813,90 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        const translations = {
+            en: {
+                title: "AUTISM CARE",
+                subtitle: "Connect Beyond Barriers",
+                description: "We empower adolescent girls with autism through inclusive support, resources, and community.",
+                findSpecialist: "Find Specialist",
+                donate: "Donate",
+                aboutAutism: "About Autism",
+                support: "Support",
+                getInvolved: "Get Involved",
+                autismHub: "Autism Hub",
+                aboutUs: "About Us",
+                stats: {
+                    stat1: "1 in 165",
+                    stat1Description: "Girls aged 5–17 in Canada are diagnosed with autism, compared to 1 in 42 boys, highlighting underdiagnosis in females.",
+                    stat2: "$1.2M - $4.7M",
+                    stat2Description: "The estimated lifetime cost of supporting an individual with ASD in Canada, depending on severity and disability levels.",
+                    stat3: "Higher Camouflaging in Females",
+                    stat3Description: "Autistic women often mask their traits, leading to increased mental health struggles, making diagnosis and support more challenging."
+                }
+            },
+            fr: {
+                title: "SOINS DE L'AUTISME",
+                subtitle: "Connecter Au-delà des Barrières",
+                description: "Nous accompagnons les adolescentes autistes grâce à un soutien inclusif, des ressources et une communauté.",
+                findSpecialist: "Trouver un Spécialiste",
+                donate: "Faire un Don",
+                aboutAutism: "À Propos de l'Autisme",
+                support: "Soutien",
+                getInvolved: "S'Impliquer",
+                autismHub: "Centre de l'Autisme",
+                aboutUs: "À Propos de Nous",
+                stats: {
+                    stat1: "1 sur 165",
+                    stat1Description: "Filles âgées de 5 à 17 ans au Canada sont diagnostiquées autistes, contre 1 sur 42 garçons, soulignant le sous-diagnostic chez les femmes.",
+                    stat2: "1,2M$ - 4,7M$",
+                    stat2Description: "Le coût estimé à vie pour soutenir une personne atteinte de TSA au Canada, selon la sévérité et les niveaux de handicap.",
+                    stat3: "Camouflage Plus Élevé chez les Femmes",
+                    stat3Description: "Les femmes autistes masquent souvent leurs traits, ce qui entraîne des difficultés accrues de santé mentale et rend le diagnostic et le soutien plus difficiles."
+                }
+            }
+        };
+
+        function setLanguage(lang) {
+            // Update active state of language buttons
+            document.querySelectorAll('.lang-option').forEach(el => {
+                el.classList.remove('active');
+                if (el.textContent.toLowerCase() === lang.toLowerCase()) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Update text content
+            document.querySelector('.title').textContent = translations[lang].title;
+            document.querySelector('.subtitle').textContent = translations[lang].subtitle;
+            document.querySelector('.description').textContent = translations[lang].description;
+
+            // Update navigation
+            document.querySelector('.btn-specialist').textContent = translations[lang].findSpecialist;
+            document.querySelector('.btn-donate').textContent = translations[lang].donate;
+
+            // Update nav links
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = translations[lang].aboutAutism;
+            navLinks[1].textContent = translations[lang].support;
+            navLinks[2].textContent = translations[lang].getInvolved;
+            navLinks[3].textContent = translations[lang].autismHub;
+            navLinks[4].textContent = translations[lang].aboutUs;
+
+            // Update statistics
+            const stats = document.querySelectorAll('.stat-box');
+            stats[0].querySelector('.stat-value').textContent = translations[lang].stats.stat1;
+            stats[0].querySelector('.stat-description').textContent = translations[lang].stats.stat1Description;
+            stats[1].querySelector('.stat-value').textContent = translations[lang].stats.stat2;
+            stats[1].querySelector('.stat-description').textContent = translations[lang].stats.stat2Description;
+            stats[2].querySelector('.stat-value').textContent = translations[lang].stats.stat3;
+            stats[2].querySelector('.stat-description').textContent = translations[lang].stats.stat3Description;
+        }
+
+        // Make setLanguage accessible globally
+        window.setLanguage = setLanguage;
     </script>
 </body>
 </html>
