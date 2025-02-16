@@ -717,11 +717,47 @@
                 chatBody.scrollTop = chatBody.scrollHeight;
             }
 
-            // Get bot response function
+            // Update the getBotResponse function
             function getBotResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                const canadianCities = {
+                    'toronto': { lat: 43.6532, lng: -79.3832 },
+                    'vancouver': { lat: 49.2827, lng: -123.1207 },
+                    'montreal': { lat: 45.5017, lng: -73.5673 },
+                    'ottawa': { lat: 45.4215, lng: -75.6972 },
+                    'calgary': { lat: 51.0447, lng: -114.0719 },
+                    'edmonton': { lat: 53.5461, lng: -113.4938 },
+                    'winnipeg': { lat: 49.8951, lng: -97.1384 }
+                };
+
+                const cityName = Object.keys(canadianCities).find(city => lowerMessage.includes(city));
+
+                if (cityName) {
+                    const coords = canadianCities[cityName];
+                    
+                    // Direct link to the Find Specialist button's href
+                    const specialistLink = document.querySelector('.btn-specialist').getAttribute('href');
+                    const mapUrl = `${specialistLink}?city=${cityName}&lat=${coords.lat}&lng=${coords.lng}`;
+                    
+                    // Immediate redirection
+                    window.location.href = mapUrl;
+
+                    return `I found specialists in ${cityName.charAt(0).toUpperCase() + cityName.slice(1)}. Redirecting you to the map...`;
+                }
+
+                // Check for specialist-related queries
+                if (lowerMessage.includes('specialist') || 
+                    lowerMessage.includes('doctor') || 
+                    lowerMessage.includes('therapist') || 
+                    lowerMessage.includes('find')) {
+                    return 'Please provide your city name to find specialists in your area (e.g., Toronto, Vancouver, Montreal).';
+                }
+
+                // Default responses
                 const responses = {
                     'Autism symptoms': 'Common autism symptoms include: \n- Difficulty with social interaction\n- Repetitive behaviors\n- Delayed language development\n- Sensory sensitivities\nWould you like to learn more about any specific symptom?',
-                    'Find specialists': 'I can help you find autism specialists in your area. Please provide your city or postal code.',
+                    'Find specialists': 'I can help you find autism specialists in your area. Please provide your city name (e.g., Toronto, Vancouver, Montreal).',
                     'Support services': 'We offer various support services including:\n- Individual therapy\n- Group therapy\n- Family counseling\n- Educational support\nWhich service would you like to learn more about?',
                     'Parent resources': 'Here are some resources for parents:\n- Parent support groups\n- Educational materials\n- Therapy guidance\n- Financial assistance information\nWhat specific information would you like?',
                     'Educational support': 'We provide educational support through:\n- School advocacy\n- IEP assistance\n- Learning accommodations\n- Teacher training\nHow can we help with your educational needs?'
