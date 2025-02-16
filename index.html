@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Autism Network Canada</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -23,6 +24,9 @@
             border-radius: 15px;
             margin: 1rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 95vw;  /* Make navbar width responsive */
+            max-width: 1400px;
+            margin: 1rem auto;
         }
 
         .nav-top {
@@ -39,7 +43,7 @@
         }
 
         .logo-image {
-            width: 80px;
+            width: clamp(50px, 8vw, 80px);  /* Responsive logo size */
             height: auto;
         }
 
@@ -53,7 +57,7 @@
             display: flex;
             gap: 0.5rem;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.8rem;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);  /* Responsive text size */
             font-weight: 600;
             color: #1a2a3a;  /* Dark blue-gray text */
             letter-spacing: 0.5px;
@@ -85,14 +89,14 @@
 
         .nav-links {
             display: flex;
-            gap: 4rem;
+            gap: clamp(1rem, 4vw, 4rem);
             padding: 0.5rem 0;
         }
 
         .nav-links a {
             color: #1a2a3a;  /* Dark blue-gray text */
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             font-weight: 500;
             transition: opacity 0.2s;
             padding: 0.5rem 1rem;
@@ -104,12 +108,12 @@
         }
 
         .btn {
-            padding: 0.8rem 2rem;
+            padding: 0.8rem clamp(1rem, 2vw, 2rem);
             border-radius: 25px;
             border: none;
             cursor: pointer;
             font-weight: 500;
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
             transition: all 0.2s;
             letter-spacing: 0.5px;
         }
@@ -130,26 +134,26 @@
 
         .main-content {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
         }
 
         .title {
-            font-size: 4rem;
+            font-size: clamp(2rem, 6vw, 4rem);
             margin-bottom: 1rem;
             color: #2c5364;  /* Dark blue */
             font-weight: 700;
         }
 
         .subtitle {
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             margin-bottom: 2rem;
             color: #34617a;  /* Slightly lighter dark blue */
             font-weight: 600;
         }
 
         .description {
-            font-size: 1.2rem;
-            max-width: 800px;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            max-width: min(800px, 90vw);
             margin: 0 auto 3rem auto;
             color: #3f729b;  /* Medium dark blue */
             line-height: 1.6;
@@ -157,16 +161,17 @@
 
         .stats-container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 2rem;
+            gap: clamp(1rem, 3vw, 2rem);
             margin-top: 3rem;
         }
 
         .stat-box {
             background-color: #2c5364;
-            padding: 2.5rem;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
             border-radius: 15px;
-            width: 320px;
+            width: clamp(280px, 90vw, 320px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -185,14 +190,9 @@
         .stat-icon {
             color: white;  /* White icon */
             opacity: 0.9;  /* Slightly transparent */
-            font-size: 2.5rem;  /* Increased size */
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
             margin-bottom: 1rem;
         }
-        .logo{
-            display: flex;
-        }
-
-
 
         .stat-title {
             font-size: 2.5rem;
@@ -205,7 +205,7 @@
         }
 
         .stat-value {
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
             margin-bottom: 1.5rem;
             font-weight: bold;
             line-height: 1.3;
@@ -213,7 +213,7 @@
         }
 
         .stat-description {
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 2vw, 1.4rem);
             line-height: 1.6;
             color: rgba(255, 255, 255, 0.95);
             margin-top: 1rem;
@@ -225,17 +225,17 @@
         /* Chatbot Styles */
         #chatbot-icon {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
+            bottom: 1.25rem;
+            right: 1.25rem;
+            width: 3.75rem;
+            height: 3.75rem;
             background-color: #ffffff;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
             z-index: 1000;
         }
@@ -246,13 +246,13 @@
 
         #chatbot-container {
             position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 350px;
-            height: 500px;
+            bottom: 5.5rem;
+            right: 1.25rem;
+            width: min(21.875rem, 90vw);
+            height: min(31.25rem, 80vh);
             background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-radius: 0.938rem;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
             display: none;
             flex-direction: column;
             z-index: 1000;
@@ -262,11 +262,12 @@
         .chat-header {
             background-color: #203a43;
             color: white;
-            padding: 15px;
+            padding: 0.938rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 500;
+            font-size: 1rem;
         }
 
         .chat-header button {
@@ -279,45 +280,53 @@
 
         .chat-body {
             flex-grow: 1;
-            padding: 15px;
+            padding: 1.25rem;
             overflow-y: auto;
             background-color: #f5f5f5;
         }
 
         .chat-input {
-            padding: 15px;
             display: flex;
-            gap: 10px;
+            gap: 0.5rem;
+            padding: 0.938rem;
             background-color: white;
             border-top: 1px solid #eee;
+            align-items: center;
         }
 
         .chat-input input {
             flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid #e0eaf5;
+            border-radius: 1.563rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: #2c5364;
             outline: none;
         }
 
         .chat-input button {
-            background-color: #203a43;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            background-color: #2c5364;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
         }
 
         .chat-input button:hover {
-            background-color: #2c5364;
+            transform: scale(1.1);
         }
 
         .message {
-            margin: 10px 0;
-            padding: 10px 15px;
-            border-radius: 15px;
+            margin: 0.625rem 0;
+            padding: 0.625rem 0.938rem;
+            border-radius: 0.938rem;
             max-width: 80%;
         }
 
@@ -350,6 +359,231 @@
         .lang-option.active {
             background-color: #2c5364;
             color: white;
+        }
+
+        /* Enhanced media queries for better responsiveness */
+        @media (max-width: 768px) {
+            .nav-top {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .nav-buttons {
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+            }
+        }
+
+        /* Chatbot responsive styles */
+        #chatbot-container {
+            width: min(21.875rem, 90vw);
+            height: min(31.25rem, 80vh);
+            right: clamp(10px, 3vw, 20px);
+            bottom: clamp(70px, 10vh, 90px);
+        }
+
+        #chatbot-icon {
+            width: 3.75rem;
+            height: 3.75rem;
+            right: clamp(10px, 3vw, 20px);
+            bottom: clamp(10px, 3vw, 20px);
+        }
+
+        /* Add Bootstrap container class override */
+        .container-fluid {
+            padding: 0;
+        }
+
+        /* Update existing chatbot styles */
+        .chat-body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .quick-prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.938rem;
+            padding: 0.625rem 0;
+        }
+
+        .prompt-btn {
+            background-color: #e0eaf5;
+            color: #2c5364;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 1.25rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .prompt-btn:hover {
+            background-color: #2c5364;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .bot-message, .user-message {
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 15px;
+            max-width: 85%;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background-color: #ffffff;
+            color: #2c5364;
+            border-top-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .user-message {
+            background-color: #2c5364;
+            color: white;
+            border-top-right-radius: 5px;
+            margin-left: auto;
+        }
+
+        .chat-input {
+            padding: 15px;
+            background-color: #ffffff;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input {
+            padding: 12px 20px;
+            border: 1px solid #e0eaf5;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: #2c5364;
+            outline: none;
+        }
+
+        .chat-input button {
+            background-color: #2c5364;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Add suggested topics section */
+        .suggested-topics {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .suggested-topics h4 {
+            color: #2c5364;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .topic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .topic-tag {
+            background-color: #f0f4f8;
+            color: #2c5364;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .topic-tag:hover {
+            background-color: #e0eaf5;
+        }
+
+        /* Add typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            width: fit-content;
+            margin: 8px 0;
+        }
+
+        .typing-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: #2c5364;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: typingAnimation 1s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingAnimation {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Update the send button styles */
+        #sendBtn {
+            min-width: 2.5rem;
+            height: 2.5rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -396,51 +630,157 @@
         </p>
 
         <div class="stats-container">
-            <div class="stat-box">
-                <div class="stat-icon">📊</div>
-                <div class="stat-value">1 in 165</div>
-                <p class="stat-description">
-                    Girls aged 5–17 in Canada are diagnosed with autism, compared to 1 in 42 boys, highlighting underdiagnosis in females.
-                </p>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="stat-box">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">1 in 165</div>
+                    <p class="stat-description">
+                        Girls aged 5–17 in Canada are diagnosed with autism, compared to 1 in 42 boys, highlighting underdiagnosis in females.
+                    </p>
+                </div>
             </div>
-            <div class="stat-box">
-                <div class="stat-icon">📊</div>
-                <div class="stat-value">$1.2M - $4.7M</div>
-                <p class="stat-description">
-                    The estimated lifetime cost of supporting an individual with ASD in Canada, depending on severity and disability levels.
-                </p>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="stat-box">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">$1.2M - $4.7M</div>
+                    <p class="stat-description">
+                        The estimated lifetime cost of supporting an individual with ASD in Canada, depending on severity and disability levels.
+                    </p>
+                </div>
             </div>
-            <div class="stat-box">
-                <div class="stat-icon">📊</div>
-                <div class="stat-value">Higher Camouflaging in Females</div>
-                <p class="stat-description">
-                    Autistic women often mask their traits, leading to increased mental health struggles, making diagnosis and support more challenging.
-                </p>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="stat-box">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">Higher Camouflaging in Females</div>
+                    <p class="stat-description">
+                        Autistic women often mask their traits, leading to increased mental health struggles, making diagnosis and support more challenging.
+                    </p>
+                </div>
             </div>
         </div>
     </main>
 
-<!-- Chatbot Icon -->
-<div id="chatbot-icon" onclick="toggleChatbot()">
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#203a43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 5V3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>
-    </svg>
-</div>
-
-<!-- Chatbot Container -->
-<div id="chatbot-container" style="display: none;">
-    <div class="chat-header">
-        <span>Chatbot Assistant</span>
-        <button onclick="toggleChatbot()">❌</button>
+    <!-- Chatbot Icon -->
+    <div id="chatbot-icon" onclick="toggleChatbot()">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#203a43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 5V3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>
+        </svg>
     </div>
-    <div class="chat-body" id="chatBody"></div>
-    <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Type your message...">
-        <button id="sendBtn">➤</button>
+
+    <!-- Chatbot Container -->
+    <div id="chatbot-container" style="display: none;">
+        <div class="chat-header">
+            <span>Autism Support Assistant</span>
+            <button onclick="toggleChatbot()">❌</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <!-- Add welcome message and quick prompts -->
+            <div class="bot-message">
+                Hello! I'm here to help you learn more about autism and find resources. What would you like to know about?
+            </div>
+            <div class="quick-prompts">
+                <button class="prompt-btn" onclick="sendQuickPrompt('Autism symptoms')">Autism Symptoms</button>
+                <button class="prompt-btn" onclick="sendQuickPrompt('Find specialists')">Find Specialists</button>
+                <button class="prompt-btn" onclick="sendQuickPrompt('Support services')">Support Services</button>
+                <button class="prompt-btn" onclick="sendQuickPrompt('Resources for parents')">Parent Resources</button>
+                <button class="prompt-btn" onclick="sendQuickPrompt('Educational support')">Educational Support</button>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type your question here...">
+            <button id="sendBtn" title="Send message">➤</button>
+        </div>
     </div>
-</div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chatbot toggle function
+            window.toggleChatbot = function() {
+                const chatbot = document.getElementById('chatbot-container');
+                chatbot.style.display = chatbot.style.display === 'none' ? 'flex' : 'none';
+            }
 
-    <script src="script.js" defer></script>
+            // Send quick prompt function
+            window.sendQuickPrompt = function(prompt) {
+                const userInput = document.getElementById('userInput');
+                userInput.value = prompt;
+                document.getElementById('sendBtn').click();
+            }
+
+            // Add message function
+            function addMessage(message, className) {
+                const chatBody = document.getElementById('chatBody');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = className;
+                messageDiv.textContent = message;
+                chatBody.appendChild(messageDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            // Get bot response function
+            function getBotResponse(message) {
+                const responses = {
+                    'Autism symptoms': 'Common autism symptoms include: \n- Difficulty with social interaction\n- Repetitive behaviors\n- Delayed language development\n- Sensory sensitivities\nWould you like to learn more about any specific symptom?',
+                    'Find specialists': 'I can help you find autism specialists in your area. Please provide your city or postal code.',
+                    'Support services': 'We offer various support services including:\n- Individual therapy\n- Group therapy\n- Family counseling\n- Educational support\nWhich service would you like to learn more about?',
+                    'Parent resources': 'Here are some resources for parents:\n- Parent support groups\n- Educational materials\n- Therapy guidance\n- Financial assistance information\nWhat specific information would you like?',
+                    'Educational support': 'We provide educational support through:\n- School advocacy\n- IEP assistance\n- Learning accommodations\n- Teacher training\nHow can we help with your educational needs?'
+                };
+
+                return responses[message] || "I understand you're asking about " + message + ". Please try one of the quick prompts above for more specific information.";
+            }
+
+            // Show typing indicator function
+            function showTypingIndicator() {
+                const chatBody = document.getElementById('chatBody');
+                const indicator = document.createElement('div');
+                indicator.className = 'typing-indicator';
+                indicator.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+                chatBody.appendChild(indicator);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            // Remove typing indicator function
+            function removeTypingIndicator() {
+                const indicator = document.querySelector('.typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+
+            // Add event listener for send button
+            document.getElementById('sendBtn').addEventListener('click', function() {
+                const userInput = document.getElementById('userInput');
+                const message = userInput.value.trim();
+                
+                if (message) {
+                    // Add user message
+                    addMessage(message, 'user-message');
+                    userInput.value = '';
+                    
+                    // Show typing indicator
+                    showTypingIndicator();
+                    
+                    // Simulate bot thinking with a delay
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        const response = getBotResponse(message);
+                        addMessage(response, 'bot-message');
+                    }, 1000);
+                }
+            });
+
+            // Add event listener for Enter key
+            document.getElementById('userInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('sendBtn').click();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
