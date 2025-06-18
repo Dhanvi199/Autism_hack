@@ -39,6 +39,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css"/>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+    <style>
+    .leaflet-control-search {
+        min-width: 350px !important;  /* Increase width */
+        font-size: 1.2em !important;  /* Increase font size */
+    }
+    .leaflet-control-search input {
+        height: 2.5em !important;     /* Increase input height */
+        font-size: 1.1em !important;
+    }
+    </style>
 </head>
 <body>
     
@@ -75,7 +85,7 @@
                 "map_79cf53dec20acd0c1c78a078b1a77452",
                 {
                     center: [44.0, -79.5],
-                    zoom: 6,
+                    zoom: 7,
                     crs: L.CRS.EPSG3857,
                     zoomControl: true,
                     preferCanvas: false,
@@ -837,32 +847,34 @@
     
             var feature_group_b9551062df960604d9ba309b66db4f1bsearchControl = new L.Control.Search({
                 layer: feature_group_b9551062df960604d9ba309b66db4f1b,
-                
                 propertyName: 'name',
-                
                 collapsed: false,
                 textPlaceholder: '🔍 Search for a specialist...',
-                position:'topright',
-            
+                position: 'topleft',
                 initial: false,
-                
                 hideMarkerOnCollapse: true
-            
-                });
-                feature_group_b9551062df960604d9ba309b66db4f1bsearchControl.on('search:locationfound', function(e) {
+            });
+            feature_group_b9551062df960604d9ba309b66db4f1bsearchControl.on('search:locationfound', function(e) {
+                feature_group_b9551062df960604d9ba309b66db4f1b.setStyle(function(feature){
+                    return feature.properties.style
+                })
+                
+                if(e.layer._popup)
+                    e.layer.openPopup();
+            })
+            feature_group_b9551062df960604d9ba309b66db4f1bsearchControl.on('search:collapsed', function(e) {
                     feature_group_b9551062df960604d9ba309b66db4f1b.setStyle(function(feature){
                         return feature.properties.style
-                    })
-                    
-                    if(e.layer._popup)
-                        e.layer.openPopup();
-                })
-                feature_group_b9551062df960604d9ba309b66db4f1bsearchControl.on('search:collapsed', function(e) {
-                        feature_group_b9551062df960604d9ba309b66db4f1b.setStyle(function(feature){
-                            return feature.properties.style
-                    });
                 });
-            map_79cf53dec20acd0c1c78a078b1a77452.addControl( feature_group_b9551062df960604d9ba309b66db4f1bsearchControl );
+            });
+            L.Control.geocoder(
+                geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc
+            ).on('markgeocode', function(e) {
+                var zoom = geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc['zoom'] || map_79cf53dec20acd0c1c78a078b1a77452.getZoom();
+                map_79cf53dec20acd0c1c78a078b1a77452.setView(e.geocode.center, zoom);
+            }).addTo(map_79cf53dec20acd0c1c78a078b1a77452);
+
+            map_79cf53dec20acd0c1c78a078b1a77452.addControl(feature_group_b9551062df960604d9ba309b66db4f1bsearchControl);
 
         
     
@@ -885,13 +897,6 @@
                 geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc['providerOptions']
             );
             geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc["geocoder"] = customGeocoder_geocoder_729c30fccf899b35750978205cd5bafc;
-
-            L.Control.geocoder(
-                geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc
-            ).on('markgeocode', function(e) {
-                var zoom = geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc['zoom'] || map_79cf53dec20acd0c1c78a078b1a77452.getZoom();
-                map_79cf53dec20acd0c1c78a078b1a77452.setView(e.geocode.center, zoom);
-            }).addTo(map_79cf53dec20acd0c1c78a078b1a77452);
 
         
     
