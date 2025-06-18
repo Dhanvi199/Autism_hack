@@ -42,33 +42,26 @@
 </head>
 <body>
     
-    
+    <a href="index.html" id="back-to-home">← Back to Home</a>
     <style>
-        .leaflet-control-search .search-input {
-            width: 300px !important;
-            height: 40px !important;
-            padding: 5px 10px !important;
-            font-size: 16px !important;
-            border: 2px solid #ccc !important;
-            border-radius: 5px !important;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
-        }
-        .leaflet-control-geocoder {
-            clear: both !important;
-        }
-        .leaflet-control-geocoder-form input {
-            width: 300px !important;
-            height: 40px !important;
-            padding: 5px 10px !important;
-            font-size: 16px !important;
-            border: 2px solid #ccc !important;
-            border-radius: 5px !important;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
-        }
-        .leaflet-control-search .search-tooltip {
-            width: 300px !important;
-            font-size: 14px !important;
-        }
+    #back-to-home {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      background: #357ab7;
+      color: #fff;
+      padding: 0.6em 1.2em;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      z-index: 1000;
+      box-shadow: 0 2px 8px #0002;
+      transition: background 0.2s;
+    }
+    #back-to-home:hover {
+      background: #23507c;
+    }
     </style>
     
     
