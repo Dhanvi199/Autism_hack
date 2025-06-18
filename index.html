@@ -581,6 +581,16 @@
             align-items: center;
             justify-content: center;
         }
+
+        .bot-message a {
+            color: #2c5364;
+            text-decoration: none;
+            border-bottom: 1px solid #2c5364;
+        }
+
+        .bot-message a:hover {
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -599,7 +609,7 @@
             </div>
             <div class="nav-buttons">
                 <a href="autism_specialists_map.html" class="btn btn-specialist">Find Specialist</a>
-                <button class="btn btn-donate">Donate</button>
+                <a href="donate.html" class="btn btn-donate">Donate</a>
                 <button class="btn btn-lang">
                     <span class="lang-option active" onclick="setLanguage('en')">EN</span>
                     <span>/</span>
@@ -708,7 +718,7 @@
                 const chatBody = document.getElementById('chatBody');
                 const messageDiv = document.createElement('div');
                 messageDiv.className = className;
-                messageDiv.textContent = message;
+                messageDiv.innerHTML = message;
                 chatBody.appendChild(messageDiv);
                 chatBody.scrollTop = chatBody.scrollHeight;
             }
@@ -717,6 +727,61 @@
             function getBotResponse(message) {
                 const lowerMessage = message.toLowerCase();
                 
+                // External resource links - Updated with NGO and government sources
+                const externalResources = {
+                    'research': {
+                        'Government of Canada Autism Research': 'https://www.canada.ca/en/public-health/services/diseases/autism-spectrum-disorder/research.html',
+                        'Canadian Autism Spectrum Disorder Alliance': 'https://www.casda.ca/resources/',
+                        'Autism Ontario Research': 'https://www.autismontario.com/research'
+                    },
+                    'support groups': {
+                        'Autism Canada Support Network': 'https://autismcanada.org/living-with-autism/treatments/support-groups/',
+                        'Autism Ontario Support Services': 'https://www.autismontario.com/programs-services',
+                        'Pacific Autism Family Network': 'https://pacificautismfamily.com/family-services/'
+                    },
+                    'financial assistance': {
+                        'Child Disability Benefit': 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/child-disability-benefit.html',
+                        'Registered Disability Savings Plan': 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/registered-disability-savings-plan-rdsp.html',
+                        'Disability Tax Credit': 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/segments/tax-credits-deductions-persons-disabilities/disability-tax-credit.html'
+                    }
+                };
+
+                // Format links as HTML
+                function formatLinks(resources) {
+                    return Object.entries(resources)
+                        .map(([name, url]) => `• <a href="${url}" target="_blank">${name}</a>`)
+                        .join('<br>');
+                }
+
+                // Check for research-related queries
+                if (lowerMessage.includes('research') || lowerMessage.includes('study') || lowerMessage.includes('studies')) {
+                    const response = document.createElement('div');
+                    response.innerHTML = `Here are some reliable autism research resources:<br><br>` +
+                        formatLinks(externalResources.research) +
+                        `<br><br>Would you like to know about specific research areas?`;
+                    return response.outerHTML;
+                }
+
+                // Check for support group queries
+                if (lowerMessage.includes('support group') || lowerMessage.includes('community') || lowerMessage.includes('connect')) {
+                    const response = document.createElement('div');
+                    response.innerHTML = `I found these support groups that might help:<br><br>` +
+                        formatLinks(externalResources['support groups']) +
+                        `<br><br>Would you like to know more about any specific group?`;
+                    return response.outerHTML;
+                }
+
+                // Check for financial assistance queries
+                if (lowerMessage.includes('financial') || lowerMessage.includes('funding') || lowerMessage.includes('money') || 
+                    lowerMessage.includes('cost') || lowerMessage.includes('benefit') || lowerMessage.includes('tax')) {
+                    const response = document.createElement('div');
+                    response.innerHTML = `Here are official financial assistance resources:<br><br>` +
+                        formatLinks(externalResources['financial assistance']) +
+                        `<br><br>Would you like specific information about any of these programs?`;
+                    return response.outerHTML;
+                }
+
+                // Original responses and city checking code remains the same
                 const canadianCities = {
                     'toronto': { lat: 43.6532, lng: -79.3832 },
                     'vancouver': { lat: 49.2827, lng: -123.1207 },
@@ -747,7 +812,12 @@
                     lowerMessage.includes('doctor') || 
                     lowerMessage.includes('therapist') || 
                     lowerMessage.includes('find')) {
-                    return 'Please provide your city name to find specialists in your area (e.g., Toronto, Vancouver, Montreal).';
+                    // List all Ontario specialists
+                    let response = '<strong>Here are some autism specialists in Ontario:</strong><br><br>' +
+                        locations.map(loc =>
+                            `<strong>${loc.name}</strong><br>${loc.address}<br><a href="https://www.google.com/maps/search/?api=1&query=${loc.lat},${loc.lng}" target="_blank">View on Map</a>`
+                        ).join('<br><br>');
+                    return response;
                 }
 
                 // Default responses
@@ -759,7 +829,10 @@
                     'Educational support': 'We provide educational support through:\n- School advocacy\n- IEP assistance\n- Learning accommodations\n- Teacher training\nHow can we help with your educational needs?'
                 };
 
-                return responses[message] || "I understand you're asking about " + message + ". Please try one of the quick prompts above for more specific information.";
+                return responses[message] || 
+                       "I understand you're asking about " + message + 
+                       ". Would you like me to search external resources for more information? " +
+                       "You can ask about research, support groups, or financial assistance.";
             }
 
             // Show typing indicator function
@@ -897,6 +970,24 @@
 
         // Make setLanguage accessible globally
         window.setLanguage = setLanguage;
+    </script>
+
+    <script>
+        const locations = [
+            { name: "Jake's House", address: "200 Consumers Rd, North York, ON", lat: 43.775, lng: -79.34 },
+            { name: "Autism Ontario", address: "1179 King St W, Toronto, ON", lat: 43.637, lng: -79.424 },
+            { name: "Shining Through Centre", address: "7365 Martin Grove Rd, Woodbridge, ON", lat: 43.773, lng: -79.595 },
+            { name: "Geneva Centre for Autism", address: "112 Merton St, Toronto, ON", lat: 43.698, lng: -79.391 },
+            { name: "AUTISM COUNSELING & TREATMENT", address: "104 Rankin Rd, Sault Ste. Marie, ON P6A 4R8", lat: 46.52448, lng: -84.26370 },
+            { name: "AUTISM COUNSELING & TREATMENT", address: "633225 Hwy 10, Mono, ON L0N 1L0", lat: 43.9397850, lng: -80.1022345 },
+            { name: "AUTISM INFORMATION & REFERRAL SVC", address: "3820 Doane Rd, East Gwillimbury (Mount Albert), ON L0G 1V0", lat: 44.137353, lng: -79.370807 },
+            { name: "AUTISM COUNSELING & TREATMENT", address: "316 Rideau River Place, Waterloo, ON N2V 2Y5", lat: 43.491888, lng: -80.591336 },
+            { name: "AUTISM INFORMATION & REFERRAL SVC", address: "30 East Glen Dr, Arkona, ON N0M 1B0", lat: 43.071717, lng: -81.823838 },
+            { name: "AUTISM INFORMATION & REFERRAL SVC", address: "Unit 1, 8000 Bathurst St, Thornhill, ON L4J 0B8", lat: 43.813538, lng: -79.451799 },
+            { name: "AUTISM COUNSELING & TREATMENT", address: "56 Bronte St S, Milton, ON L9T 1Y8", lat: 43.5072346, lng: -79.8867978 },
+            { name: "AUTISM COUNSELING & TREATMENT", address: "Suite 103, 1405 North Service Rd E, Oakville, ON L6H 1A7", lat: 43.48415, lng: -79.67388 },
+            { name: "AUTISM COUNSELING & TREATMENT", address: "6219 Abbott St W, Stittsville, ON K2S 0B4", lat: 45.25651, lng: -75.924472 }
+        ];
     </script>
 </body>
 </html>

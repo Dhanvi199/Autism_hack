@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 🔹 Load Google Map with Autism Specialists
     function initMap() {
-        var map = L.map("map-container").setView([43.7, -79.42], 6); // Center Ontario
+        var map = L.map("map-container").setView([44.0, -79.5], 6); // Center Ontario
 
         // Load OpenStreetMap tiles
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
