@@ -989,5 +989,79 @@
             { name: "AUTISM COUNSELING & TREATMENT", address: "6219 Abbott St W, Stittsville, ON K2S 0B4", lat: 45.25651, lng: -75.924472 }
         ];
     </script>
+
+    <script>
+        $('#quick-replies').on('click', '.quick-reply', function() {
+            const messageText = $(this).text();
+            appendMessage('user', messageText);
+            handleBotResponse(messageText);
+        });
+
+        function handleBotResponse(userMessage) {
+            let botMessage = '';
+            const lowerCaseUserMessage = userMessage.toLowerCase();
+
+            if (lowerCaseUserMessage === 'find specialist') {
+                botMessage = "Great! Please select a province to find a specialist.";
+                setTimeout(() => {
+                    appendMessage('bot', botMessage);
+                    showProvinceButtons();
+                }, 500);
+                return;
+            } else if (lowerCaseUserMessage === 'general info') {
+                botMessage = "The Autism Network Canada provides resources, support, and a community for individuals and families affected by autism. What specific information are you looking for?";
+            } else if (lowerCaseUserMessage === 'get involved') {
+                botMessage = "That's great! You can get involved by visiting our events page.";
+                setTimeout(() => {
+                    window.location.href = 'get_involved.html';
+                }, 1500);
+            } else if (['ontario', 'quebec', 'alberta', 'manitoba'].includes(lowerCaseUserMessage)) {
+                handleProvinceSelection(lowerCaseUserMessage);
+                return;
+            } else {
+                botMessage = "I'm sorry, I didn't quite understand. Could you please rephrase? You can ask me about finding a specialist, general info, or how to get involved.";
+            }
+
+            setTimeout(() => {
+                appendMessage('bot', botMessage);
+            }, 500);
+        }
+
+        function showProvinceButtons() {
+            const quickRepliesContainer = $('#quick-replies');
+            quickRepliesContainer.empty();
+            const provinces = ['Ontario', 'Quebec', 'Alberta', 'Manitoba'];
+            provinces.forEach(province => {
+                const button = $('<button class="quick-reply"></button>').text(province);
+                quickRepliesContainer.append(button);
+            });
+        }
+
+        function handleProvinceSelection(province) {
+            let botMessage = '';
+            if (province === 'ontario') {
+                botMessage = "Redirecting you to the map for Ontario...";
+                setTimeout(() => {
+                    appendMessage('bot', botMessage);
+                    setTimeout(() => {
+                        window.location.href = 'autism_specialists_map.html';
+                    }, 1000);
+                }, 500);
+            } else {
+                botMessage = `Support for ${province.charAt(0).toUpperCase() + province.slice(1)} is coming soon!`;
+                setTimeout(() => {
+                    appendMessage('bot', botMessage);
+                }, 500);
+            }
+        }
+
+        function setupInitialChat() {
+            const initialBotMessage = "Hello! I'm your virtual assistant from The Autism Network Canada. How can I help you today?";
+            appendMessage('bot', initialBotMessage);
+        }
+
+        // Initialize chatbot
+        setupInitialChat();
+    </script>
 </body>
 </html>
