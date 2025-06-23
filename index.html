@@ -779,9 +779,25 @@
                 }
 
                 if (lowerMessage === 'ontario') {
-                    window.location.href = 'autism_specialists_map.html';
-                    return 'Redirecting you to the map for Ontario...';
-                }
+    // 1. Build the list of specialists
+    let response = '<strong>Here are some autism specialists in Ontario:</strong><br><br>' +
+        locations.map(loc =>
+            `<strong>${loc.name}</strong><br>${loc.address}<br>`
+        ).join('<br>');
+
+    // 2. Add the "View Map" button
+    response += `<br><button id="viewMapBtn" style="margin-top:1em;padding:0.5em 1.2em;background:#2c5364;color:#fff;border:none;border-radius:5px;cursor:pointer;">View Map</button>`;
+
+    // 3. After the message is added, attach the click event to the button
+    setTimeout(() => {
+        const btn = document.getElementById('viewMapBtn');
+        if (btn) {
+            btn.onclick = () => { window.location.href = 'autism_specialists_map.html'; };
+        }
+    }, 100);
+
+    return response;
+}
 
                 if (['quebec', 'alberta', 'manitoba'].includes(lowerMessage)) {
                     return `Support for ${message.charAt(0).toUpperCase() + message.slice(1)} is coming soon!`;
