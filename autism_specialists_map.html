@@ -73,10 +73,14 @@
 <body>
     
     <a href="index.html" id="back-to-home">← Back to Home</a>
-    
-    
-            <div class="folium-map" id="map_79cf53dec20acd0c1c78a078b1a77452" ></div>
-        
+    <div style="width: 100%; display: flex; justify-content: center; margin-top: 1.5em; margin-bottom: 0.5em;">
+        <div id="search-bar-container" style="display: flex; align-items: center; gap: 1em; padding: 1em; background: #fff; z-index: 1001; max-width: 600px; border-radius: 8px; box-shadow: 0 2px 8px #0001;">
+            <input id="custom-search" type="text" placeholder="Search for a specialist, address, or location..." style="flex: 1; padding: 0.7em 1em; font-size: 1.1em; border-radius: 5px; border: 1px solid #ccc;">
+            <button id="find-near-me" style="padding: 0.7em 1.2em; background: #357ab7; color: #fff; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Find Near Me</button>
+        </div>
+    </div>
+    <div class="folium-map" id="map_79cf53dec20acd0c1c78a078b1a77452"></div>
+    <div id="results-list" style="max-width: 600px; margin: 1em auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 1em; display: none;"></div>
 </body>
 <script>
     
@@ -84,8 +88,8 @@
             var map_79cf53dec20acd0c1c78a078b1a77452 = L.map(
                 "map_79cf53dec20acd0c1c78a078b1a77452",
                 {
-                    center: [44.0, -79.5],
-                    zoom: 7,
+                    center: [43.7, -79.4],
+                    zoom: 8,
                     crs: L.CRS.EPSG3857,
                     zoomControl: true,
                     preferCanvas: false,
@@ -845,61 +849,6 @@
             feature_group_b9551062df960604d9ba309b66db4f1b.addTo(map_79cf53dec20acd0c1c78a078b1a77452);
         
     
-            var feature_group_b9551062df960604d9ba309b66db4f1bsearchControl = new L.Control.Search({
-                layer: feature_group_b9551062df960604d9ba309b66db4f1b,
-                propertyName: 'name',
-                collapsed: false,
-                textPlaceholder: '🔍 Search for a specialist...',
-                position: 'topleft',
-                initial: false,
-                hideMarkerOnCollapse: true
-            });
-            feature_group_b9551062df960604d9ba309b66db4f1bsearchControl.on('search:locationfound', function(e) {
-                feature_group_b9551062df960604d9ba309b66db4f1b.setStyle(function(feature){
-                    return feature.properties.style
-                })
-                
-                if(e.layer._popup)
-                    e.layer.openPopup();
-            })
-            feature_group_b9551062df960604d9ba309b66db4f1bsearchControl.on('search:collapsed', function(e) {
-                    feature_group_b9551062df960604d9ba309b66db4f1b.setStyle(function(feature){
-                        return feature.properties.style
-                });
-            });
-            L.Control.geocoder(
-                geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc
-            ).on('markgeocode', function(e) {
-                var zoom = geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc['zoom'] || map_79cf53dec20acd0c1c78a078b1a77452.getZoom();
-                map_79cf53dec20acd0c1c78a078b1a77452.setView(e.geocode.center, zoom);
-            }).addTo(map_79cf53dec20acd0c1c78a078b1a77452);
-
-            map_79cf53dec20acd0c1c78a078b1a77452.addControl(feature_group_b9551062df960604d9ba309b66db4f1bsearchControl);
-
-        
-    
-
-            var geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc = {
-  "collapsed": false,
-  "position": "topleft",
-  "defaultMarkGeocode": true,
-  "zoom": 11,
-  "provider": "nominatim",
-  "providerOptions": {
-},
-  "placeholder": "\ud83d\udd0d Search for a location...",
-};
-
-            // note: geocoder name should start with lowercase
-            var geocoderName_geocoder_729c30fccf899b35750978205cd5bafc = geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc["provider"];
-
-            var customGeocoder_geocoder_729c30fccf899b35750978205cd5bafc = L.Control.Geocoder[ geocoderName_geocoder_729c30fccf899b35750978205cd5bafc ](
-                geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc['providerOptions']
-            );
-            geocoderOpts_geocoder_729c30fccf899b35750978205cd5bafc["geocoder"] = customGeocoder_geocoder_729c30fccf899b35750978205cd5bafc;
-
-        
-    
             var layer_control_33e13501af695aadc35b32fcd651ea16_layers = {
                 base_layers : {
                     "openstreetmap" : tile_layer_490563a77829679d8769b14849f8670a,
@@ -919,5 +868,117 @@
             ).addTo(map_79cf53dec20acd0c1c78a078b1a77452);
 
         
+</script>
+<script>
+// --- Specialist Data (from map markers) ---
+const specialists = [
+  { name: "CARE Ltd - Centre for Autism Remediation & Education", address: "8611 Weston Rd, Vaughan, ON L4L 9P1, Canada", lat: 43.8107463, lng: -79.5519443 },
+  { name: "Autism Therapy & Training Inc.", address: "111 Regina Rd, Woodbridge, ON L4L 8N5, Canada", lat: 43.7721242, lng: -79.6117638 },
+  { name: "Maxi Mind Learning", address: "7250 Keele St #423, Vaughan, ON L4K 1Z8, Canada", lat: 43.7869742, lng: -79.4974547 },
+  { name: "vaughan centre for autism", address: "9131 Keele St a4, Vaughan, ON L4K 0G7, Canada", lat: 43.834113, lng: -79.506768 },
+  { name: "TACT | The Autism Centre of Toronto", address: "2180 Bayview Ave, North York, ON M4N 3K7, Canada", lat: 43.7249842, lng: -79.3804767 },
+  { name: "Side by Side Therapy", address: "252 Charlton Ave, Thornhill, ON L4J 6H2, Canada", lat: 43.793368, lng: -79.4629697 },
+  { name: "Breakthrough Autism", address: "519 16th Ave, Richmond Hill, ON L4C 7A7, Canada", lat: 43.8560063, lng: -79.4175384 },
+  { name: "Toronto IBI Autism Services", address: "1170 Sheppard Ave W #32, North York, ON M3K 2A3, Canada", lat: 43.7553059, lng: -79.4717658 },
+  { name: "Hope Autism Services", address: "150 Britannia Rd E #9, Mississauga, ON L4Z 2A4, Canada", lat: 43.6288397, lng: -79.6754265 },
+  { name: "Lindsey Malc, BCBA - Autism, ABA and Behaviour Therapist/Analyst for ASD in Toronto", address: "252 Charlton Ave, Vaughan, ON L4J 6H2, Canada", lat: 43.793375, lng: -79.4629788 },
+  { name: "ATAMIC Clinic (North York)", address: "32 Altamont Rd, North York, ON M2M 1S7, Canada", lat: 43.7795, lng: -79.4267056 },
+  { name: "SAAAC Autism Centre", address: "705 Progress Ave #63, Scarborough, ON M1H 2X1, Canada", lat: 43.7762635, lng: -79.2466742 },
+  { name: "Waves of Changes for Autism", address: "260 Edgeley Blvd Unit #32, Concord, ON L4K 3Y4, Canada", lat: 43.7987174, lng: -79.5340868 },
+  { name: "Aim Pediatric Therapy ABA Therapy & Autism Specialists , Since 2011", address: "2250 Bovaird Dr E Unit 215, Brampton, ON L6R 0W3, Canada", lat: 43.7508309, lng: -79.7393303 },
+  { name: "Superminds Autism Therapy", address: "50 Dr Kay Dr Unit C18, Schomberg, ON L0G 1T0, Canada", lat: 44.0060042, lng: -79.6780124 },
+  { name: "Together We Rise Autism Services For Treatment and Development", address: "1351 Matheson Blvd E #24b, Mississauga, ON L4W 2A1, Canada", lat: 43.6399602, lng: -79.6315249 },
+  { name: "Autism In Mind", address: "121 Granton Dr Unit 12, Richmond Hill, ON L4B 3N4, Canada", lat: 43.860372, lng: -79.3878809 },
+  { name: "Geneva Centre for Autism", address: "164 Merton St, Toronto, ON M4S 3A8, Canada", lat: 43.6974768, lng: -79.3912092 },
+  { name: "Autism and Behavioral Services", address: "5800 Ambler Dr #117, Mississauga, ON L4W 4J4, Canada", lat: 43.6429941, lng: -79.6459647 },
+  { name: "Kerry's Place Autism Services", address: "222 Lesmill Rd, North York, ON M3B 2V1, Canada", lat: 43.7615573, lng: -79.3596198 }
+];
+
+// --- Marker Management ---
+let specialistMarkers = [];
+function clearMarkers() {
+  specialistMarkers.forEach(m => map_79cf53dec20acd0c1c78a078b1a77452.removeLayer(m));
+  specialistMarkers = [];
+}
+function showMarkers(list) {
+  clearMarkers();
+  list.forEach(s => {
+    const marker = L.marker([s.lat, s.lng]).addTo(map_79cf53dec20acd0c1c78a078b1a77452);
+    marker.bindPopup(`<b>${s.name}</b><br>${s.address}`);
+    specialistMarkers.push(marker);
+  });
+}
+
+// --- Results List ---
+function showResults(list) {
+  const resultsDiv = document.getElementById('results-list');
+  if (!list.length) {
+    resultsDiv.innerHTML = '<em>No specialists found.</em>';
+    resultsDiv.style.display = 'block';
+    return;
+  }
+  resultsDiv.innerHTML = list.map(s =>
+    `<div style="margin-bottom:1em;"><b>${s.name}</b><br>${s.address}<br><a href="#" onclick="flyToSpecialist(${s.lat},${s.lng});return false;">View on Map</a></div>`
+  ).join('');
+  resultsDiv.style.display = 'block';
+}
+window.flyToSpecialist = function(lat, lng) {
+  map_79cf53dec20acd0c1c78a078b1a77452.setView([lat, lng], 14);
+};
+
+// --- Search Logic ---
+document.getElementById('custom-search').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    const q = this.value.trim().toLowerCase();
+    if (!q) {
+      showMarkers(specialists);
+      showResults(specialists);
+      return;
+    }
+    const filtered = specialists.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      s.address.toLowerCase().includes(q)
+    );
+    showMarkers(filtered);
+    showResults(filtered);
+    if (filtered.length) {
+      map_79cf53dec20acd0c1c78a078b1a77452.setView([filtered[0].lat, filtered[0].lng], 12);
+    }
+  }
+});
+
+// --- Find Near Me Logic ---
+document.getElementById('find-near-me').addEventListener('click', function() {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser.');
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    const userLat = pos.coords.latitude;
+    const userLng = pos.coords.longitude;
+    const radiusKm = 20;
+    function haversine(lat1, lng1, lat2, lng2) {
+      const R = 6371;
+      const dLat = (lat2-lat1)*Math.PI/180;
+      const dLng = (lng2-lng1)*Math.PI/180;
+      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+    const nearby = specialists.filter(s => haversine(userLat, userLng, s.lat, s.lng) <= radiusKm);
+    showMarkers(nearby);
+    showResults(nearby);
+    if (nearby.length) {
+      map_79cf53dec20acd0c1c78a078b1a77452.setView([userLat, userLng], 12);
+    } else {
+      map_79cf53dec20acd0c1c78a078b1a77452.setView([userLat, userLng], 12);
+    }
+  }, function() {
+    alert('Unable to retrieve your location.');
+  });
+});
+
+// --- Initial State: show all specialists ---
+showMarkers(specialists);
+showResults(specialists);
 </script>
 </html>
